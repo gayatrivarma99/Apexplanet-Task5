@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumlyfe - Food Delivery & Restaurant Discovery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Yumlyfe</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#restaurants">Restaurants</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button class="btn-cart" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="btn-login" onclick="showLoginModal()">Login</button>
+                <button class="btn-signup" onclick="showSignupModal()">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Discover the best Indian food & drinks</h1>
+            <p>From authentic biryani to refreshing mocktails - find the best Indian cuisine near you</p>
+            <div class="search-container">
+                <div class="location-input">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" placeholder="Enter your location" id="locationInput">
+                </div>
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for biryani, mocktails, restaurants..." id="searchInput">
+                    <button class="search-btn" onclick="searchRestaurants()">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters" id="restaurants">
+        <div class="container">
+            <h2>Restaurants near you</h2>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label>Cuisine:</label>
+                    <select id="cuisineFilter" onchange="applyFilters()">
+                        <option value="">All Cuisines</option>
+                        <option value="indian">Indian</option>
+                        <option value="beverages">Beverages</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="italian">Italian</option>
+                        <option value="mexican">Mexican</option>
+                        <option value="american">American</option>
+                        <option value="japanese">Japanese</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Rating:</label>
+                    <select id="ratingFilter" onchange="applyFilters()">
+                        <option value="">All Ratings</option>
+                        <option value="4.5">4.5+ Stars</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="3">3+ Stars</option>
+                        <option value="2">2+ Stars</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range:</label>
+                    <select id="priceFilter" onchange="applyFilters()">
+                        <option value="">All Prices</option>
+                        <option value="1">₹ (Under ₹300)</option>
+                        <option value="2">₹₹ (₹300-600)</option>
+                        <option value="3">₹₹₹ (₹600-1000)</option>
+                        <option value="4">₹₹₹₹ (Above ₹1000)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sort by:</label>
+                    <select id="sortFilter" onchange="applyFilters()">
+                        <option value="rating">Rating</option>
+                        <option value="delivery_time">Delivery Time</option>
+                        <option value="price">Price</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurant Grid -->
+    <section class="restaurants-grid">
+        <div class="container">
+            <div class="restaurants-container" id="restaurantsContainer">
+                <!-- Restaurants will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurant Modal -->
+    <div class="modal" id="restaurantModal">
+        <div class="modal-content restaurant-modal">
+            <span class="close" onclick="closeRestaurantModal()">&times;</span>
+            <div class="restaurant-header">
+                <img id="modalRestaurantImage" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="">
+                <div class="restaurant-info">
+                    <h2 id="modalRestaurantName"></h2>
+                    <p id="modalRestaurantCuisine"></p>
+                    <div class="restaurant-stats">
+                        <span class="rating" id="modalRestaurantRating"></span>
+                        <span class="delivery-time" id="modalDeliveryTime"></span>
+                        <span class="price-range" id="modalPriceRange"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-section">
+                <h3>Menu</h3>
+                <div class="menu-items" id="menuItems">
+                    <!-- Menu items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be populated by JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: ₹<span id="cartTotal">0.00</span></strong>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content auth-modal">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="showSignupModal()">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content auth-modal">
+            <span class="close" onclick="closeSignupModal()">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" placeholder="Phone Number" required>
+                </div>
+                <button type="submit" class="auth-btn">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="showLoginModal()">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Yumlyfe</h3>
+                    <p>Discover the best Indian food & drinks in your city</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Restaurants</h4>
+                    <ul>
+                        <li><a href="#">Partner with us</a></li>
+                        <li><a href="#">Apps for you</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Yumlyfe. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
